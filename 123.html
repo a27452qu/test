@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		// 題目：做一個競標倒數計時器，會有一個結標時間，譬如：2020/02/21 12:00:00，請以距離目前時間來計算，還有多久時間，並進行倒數？
+		// 學習重點：Date物件
+		// 1. getTime() 取得毫秒數
+		// 2. timer = setInterval(function(){}, 1000)
+		// 3. clearInterval(timer) // 把上面的timer關掉
+
+		// 計算一天總共有幾秒
+		var DAY = 24 * 60 * 60;
+		// 計算一小時有幾秒
+		var HOUR = 60 * 60;
+		// 計算一分鐘有幾秒
+		var MINUTE = 60;
+		// 1. 結標時間: 2020/02/21 12:00:00
+		var deadline = new Date(2020, 2, 19, 12, 04, 0);
+		var timer;
+
+		// 2. 寫一個函式，計算deadline與現在時間，還剩多少久？以毫秒數表示。 提示：getTime() 可以取得毫秒數
+		function timeLeft() {
+			// 取得現在時間
+			var now = new Date();
+			// 個別取得毫秒數
+			var nowMili = now.getTime();
+			var deadMili = deadline.getTime();
+
+			// 回傳相差的毫秒數
+			return deadMili - nowMili;
+		}
+
+		// 3. 寫一個函式，回傳格式化剩餘的時間，格式：'距離結標日，還剩下 23天5小時23分3秒。'
+		function timeFormat(leftTimes) { // 傳入毫秒數
+			// 總共還剩幾秒，無條件捨去
+			var secondLeft = Math.floor(leftTimes / 1000);
+
+			// 剩餘幾天？
+			var dayLeft = Math.floor(secondLeft / DAY);
+			// 扣掉天數，還剩幾秒
+			var secondLeft = secondLeft % DAY;
+			// 剩餘幾小時？
+			var hourLeft = Math.floor(secondLeft / HOUR);
+			// 扣掉小時，還剩幾秒
+			var secondLeft = secondLeft % HOUR;
+			// 剩餘幾分鐘？
+			var minuteLeft = Math.floor(secondLeft / MINUTE);
+			// 扣掉分鐘，還剩幾秒
+			var secondLeft = secondLeft % MINUTE;
+
+			// 回傳格式結果
+			return '距離結標日，還剩下 '+dayLeft+'天'+hourLeft+'小時'+minuteLeft+'分'+secondLeft+'秒。';
+		}
+
+		// 4. 利用setInterval()寫計時器，每秒更新一次結果並輸出。若時間到，請列印'已結標！'，並將計時器停止。
+		timer = setInterval(function(){
+			var leftTimes = timeLeft(); // deadline與現在時間，還剩多少久？以毫秒數表示。
+			if(leftTimes > 0) {
+				var log = timeFormat(leftTimes);
+				console.log(log);
+			} else {
+				console.log('已結標！');
+				clearInterval(timer);
+			}
+		}, 1000);
+
+		// 5. 將結標時間改成距離現在時間剩一分鐘，請確認是否能正確停止計時器？
+	</script>
+	
+
+</body>
+</html>
